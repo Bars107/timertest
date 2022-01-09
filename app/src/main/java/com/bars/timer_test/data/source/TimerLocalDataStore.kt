@@ -6,12 +6,12 @@ import javax.inject.Inject
 
 class TimerLocalDataStore @Inject constructor(): ITimerDataStore {
 
-    override suspend fun loadTimer(context: Context): UInt {
+    override suspend fun loadTimer(context: Context): Long {
         val pref = context.getSharedPreferences(timer_preference_key, MODE_PRIVATE)
-        return pref.getString(timer_value_key, "0")!!.toUInt()
+        return pref.getString(timer_value_key, "0")!!.toLong()
     }
 
-    override fun saveTimer(timer: UInt, context: Context) {
+    override fun saveTimer(timer: Long, context: Context) {
         val pref = context.getSharedPreferences(timer_preference_key, MODE_PRIVATE)
         with(pref.edit()) {
             putString(timer_value_key, timer.toString())

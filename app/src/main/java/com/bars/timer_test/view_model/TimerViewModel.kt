@@ -18,12 +18,15 @@ class TimerViewModel @Inject constructor(private val timerUseCase: TimerUseCase)
     //one for the data change and another for loading state
     //however it makes more clear from development perspective to split those two
     val loadingViewState = MutableLiveData<Boolean>()
-    val dataViewState = MutableLiveData<UInt>()
-    val tickingViewState = MutableLiveData<UInt>()
+    val dataViewState = MutableLiveData<Long>()
+    val tickingViewState = MutableLiveData<Long>()
 
-    val isTicking : Boolean get() { return tickingCoroutine != null }
+    val isTicking: Boolean
+        get() {
+            return tickingCoroutine != null
+        }
 
-    private var lastTick: UInt = 0u
+    private var lastTick: Long = 0
 
     //field to save ticking coroutine. See startTimer()
     private var tickingCoroutine: Job? = null
@@ -36,7 +39,10 @@ class TimerViewModel @Inject constructor(private val timerUseCase: TimerUseCase)
                 lastTick = timerVal
                 dataViewState.value = timerVal
             } catch (e: Exception) {
+                //it should never fail, so it's more for extending in future
                 loadingViewState.value = false
+                lastTick = 0
+                dataViewState.value = lastTick
                 Log.e(tag, "Failed to load data")
             }
         }
@@ -47,8 +53,8 @@ class TimerViewModel @Inject constructor(private val timerUseCase: TimerUseCase)
     }
 
     fun startTimer() {
-         tickingCoroutine = viewModelScope.launch {
-            while(true) {
+        tickingCoroutine = viewModelScope.launch {
+            while (true) {
                 delay(1000)
                 lastTick++
                 tickingViewState.value = lastTick

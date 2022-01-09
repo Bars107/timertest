@@ -19,6 +19,7 @@ class TimerFragment : Fragment() {
     private val timerViewModel: TimerViewModel by viewModels()
 
     private var _binding: FragmentTimerBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -64,7 +65,7 @@ class TimerFragment : Fragment() {
         }
     }
 
-    private fun subscribeToEvents(){
+    private fun subscribeToEvents() {
         timerViewModel.loadingViewState.observe(viewLifecycleOwner, {
             onLoadingFinished(it)
         })
@@ -76,7 +77,7 @@ class TimerFragment : Fragment() {
         })
     }
 
-    private fun onLoadingFinished(status: Boolean){
+    private fun onLoadingFinished(status: Boolean) {
         binding.run {
             progress.isVisible = false
             startStopBtn.isVisible = true
@@ -88,18 +89,18 @@ class TimerFragment : Fragment() {
         }
     }
 
-    private fun onDataChanged(value: UInt) {
+    private fun onDataChanged(value: Long) {
         binding.timerTv.text = convertTimeToString(value)
+    }
+
+    //I'm not using SimpleDate format since we can have more that 24hours, so it will not work properly
+    private fun convertTimeToString(value: Long): String {
+        return String.format("%02d:%02d:%02d", value / 3600, (value % 3600) / 60, value % 60)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun convertTimeToString(value: UInt) : String{
-        //TODO implement proper convertion
-        return value.toString()
     }
 
     companion object {

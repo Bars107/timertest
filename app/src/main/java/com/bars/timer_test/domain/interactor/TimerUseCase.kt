@@ -8,11 +8,11 @@ class TimerUseCase @Inject constructor(
     private val timerRepository: ITimerRepository
 ) : ITimerUseCase {
 
-    override suspend fun loadTimer(context: Context): UInt {
+    override suspend fun loadTimer(context: Context): Long {
         return timerRepository.loadTimer(context)
     }
 
-    override fun saveTimer(timer: UInt, context: Context) {
+    override fun saveTimer(timer: Long, context: Context) {
         timerRepository.saveTimer(timer, context)
     }
 }
