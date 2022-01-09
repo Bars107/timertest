@@ -7,24 +7,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bars.timer_test.domain.interactor.TimerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.flow
 import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class TimerViewModel @Inject constructor(private val timerUseCase: TimerUseCase) : ViewModel() {
 
-    //techically we don't need three LiveData here, two is enough:
+    //technically we don't need three LiveData here, two is enough:
     //one for the data change and another for loading state
     //however it makes more clear from development perspective to split those two
     val loadingViewState = MutableLiveData<Boolean>()
     val dataViewState = MutableLiveData<UInt>()
     val tickingViewState = MutableLiveData<UInt>()
 
+    val isTicking : Boolean get() { return tickingCoroutine != null }
+
     private var lastTick: UInt = 0u
-    private var coroutine: Job? = null
+
+    //field to save ticking coroutine. See startTimer()
+    private var tickingCoroutine: Job? = null
 
     fun loadLastTimerValue(context: Context) {
         viewModelScope.launch {
@@ -40,8 +42,12 @@ class TimerViewModel @Inject constructor(private val timerUseCase: TimerUseCase)
         }
     }
 
+    fun saveTimer(context: Context) {
+        timerUseCase.saveTimer(lastTick, context)
+    }
+
     fun startTimer() {
-         coroutine = viewModelScope.launch {
+         tickingCoroutine = viewModelScope.launch {
             while(true) {
                 delay(1000)
                 lastTick++
@@ -51,8 +57,8 @@ class TimerViewModel @Inject constructor(private val timerUseCase: TimerUseCase)
     }
 
     fun stopTimer() {
-        coroutine?.cancel()
-        coroutine = null
+        tickingCoroutine?.cancel()
+        tickingCoroutine = null
     }
 
     companion object {
