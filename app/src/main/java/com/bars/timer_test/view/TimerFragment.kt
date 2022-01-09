@@ -23,6 +23,8 @@ class TimerFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private var isTicking: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +39,22 @@ class TimerFragment : Fragment() {
         subscribeToEvents()
 
         timerViewModel.loadLastTimerValue(requireContext())
+
+        binding.startStopBtn.setOnClickListener {
+            startStopTimer()
+        }
+    }
+
+    private fun startStopTimer() {
+        isTicking = if (isTicking) {
+            timerViewModel.stopTimer()
+            binding.startStopBtn.setText(R.string.start)
+            false
+        } else {
+            timerViewModel.startTimer()
+            binding.startStopBtn.setText(R.string.stop)
+            true
+        }
     }
 
     private fun subscribeToEvents(){
