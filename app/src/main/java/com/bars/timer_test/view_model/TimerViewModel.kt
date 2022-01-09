@@ -38,6 +38,7 @@ class TimerViewModel @Inject constructor(private val timerUseCase: TimerUseCase)
                 loadingViewState.value = true
                 lastTick = timerVal
                 dataViewState.value = timerVal
+                Log.d(tag, "Data loaded")
             } catch (e: Exception) {
                 //it should never fail, so it's more for extending in future
                 loadingViewState.value = false
@@ -55,11 +56,16 @@ class TimerViewModel @Inject constructor(private val timerUseCase: TimerUseCase)
     fun startTimer() {
         tickingCoroutine = viewModelScope.launch {
             while (true) {
-                delay(1000)
+                ticking()
                 lastTick++
                 tickingViewState.value = lastTick
             }
         }
+    }
+
+    //not in UI thread
+    private suspend fun ticking() = withContext(Dispatchers.IO) {
+        delay(1000)
     }
 
     fun stopTimer() {
