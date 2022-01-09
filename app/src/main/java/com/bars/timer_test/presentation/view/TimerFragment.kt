@@ -1,4 +1,4 @@
-package com.bars.timer_test.view
+package com.bars.timer_test.presentation.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bars.timer_test.R
 import com.bars.timer_test.databinding.FragmentTimerBinding
-import com.bars.timer_test.view_model.TimerViewModel
+import com.bars.timer_test.presentation.view_model.TimerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

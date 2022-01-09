@@ -1,4 +1,4 @@
-package com.bars.timer_test.view_model
+package com.bars.timer_test.presentation.view_model
 
 import android.content.Context
 import android.util.Log

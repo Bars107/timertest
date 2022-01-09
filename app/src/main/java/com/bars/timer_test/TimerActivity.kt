@@ -2,8 +2,8 @@ package com.bars.timer_test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bars.timer_test.view.TimerFragment
-import com.bars.timer_test.view.TimerFragment.Companion.TAG
+import com.bars.timer_test.presentation.view.TimerFragment
+import com.bars.timer_test.presentation.view.TimerFragment.Companion.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
